@@ -3,6 +3,7 @@
 #include <time.h>
 
 enum e_sexe {H,F};
+enum e_privilege {admin, responsable, formateur, stagiaire};
 
 typedef struct s_matricule{
     int annee;
