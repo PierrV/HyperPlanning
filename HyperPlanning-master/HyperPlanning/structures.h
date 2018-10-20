@@ -28,7 +28,7 @@ typedef struct s_stagiaire {
     Login login;
     char* nom;
     char* prenom;
-    char* date_naissance; // a modifier en date si possible
+    char* d_naissance; // a modifier en date si possible
     enum e_sexe sexe;
     char* d_inscription; //a modifier en date si possible
     int num_rue;
@@ -76,17 +76,21 @@ typedef struct s_seance{
     enum e_tseance type;
 } Seance;
 
-
-
-
-
-
-
-
-
-int initGrp(Groupe*);
+int initGrp(Groupe*, int*);
 int destrGrp(Groupe *);
-int initStg(Stagiaire*);
+int initStg(Stagiaire*, Groupe*, int);
+int majNom(Stagiaire*);
+int majPrenom(Stagiaire*);
+int majSexe(Stagiaire*);
+int majNaissance(Stagiaire*);
+int majInscription(Stagiaire*);
+int majNumRue(Stagiaire*);
+int majNomRue(Stagiaire*);
+int majCP(Stagiaire*);
+int majVille(Stagiaire*);
+int majTelDom(Stagiaire*);
+int majTelMob(Stagiaire*);
+int addToGrp(Stagiaire*, Groupe*, int);
 int destrStg(Stagiaire *);
 int initForm(Formateur*);
 int destrForm(Formateur*);

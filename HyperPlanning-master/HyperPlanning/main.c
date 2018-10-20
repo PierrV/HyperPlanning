@@ -6,18 +6,39 @@ int main()
 {
     num_groupe=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de groupe max
     num_matricule=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de matricule max
-    int nb_g,nb_f;
+    int nb_g=0,nb_f=0;
+    Groupe* total_g=malloc(sizeof(Groupe)*3);
     Groupe g1,g2;
     Stagiaire s1;
-    if (initGrp(&g1)==-1)
+    if (initGrp(&g1,&nb_g)==-1)
         return -1;
-    if (initGrp(&g2)==-1)
-        return -1;
-    if (initStg(&s1)==-1)
+    if (initGrp(&g2,&nb_g)==-1)
         return -1;
 
-printf("g1 %d\n",g1.num);
-printf("g2 %d\n",g2.num);
+    total_g[0]=g1;
+    total_g[1]=g2;
+
+    if (initStg(&s1,total_g,nb_g)==-1)
+        return -1;
+
+
+/*printf("%s\n",s1.prenom);
+printf("%s\n",s1.nom);
+printf("%s\n",s1.matricule);
+printf("%s\n",s1.login.identifiant);
+printf("%s\n",s1.login.mdp);
+if (s1.sexe==H)
+    printf("Homme\n");
+if (s1.sexe==F)
+    printf("Femme\n");
+printf("%s\n",s1.d_naissance);
+printf("%s\n",s1.d_inscription);
+printf("%d\n",s1.num_rue);
+printf("%s\n",s1.nom_rue);
+printf("%s\n",s1.code_postal);
+printf("%s\n",s1.ville);
+printf("%s\n",s1.tel_domicile);
+printf("%s\n",s1.tel_mobile);  */
 
  /*   Login* log;
     int droit;
