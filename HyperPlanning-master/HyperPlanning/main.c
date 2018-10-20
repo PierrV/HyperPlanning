@@ -1,4 +1,4 @@
-#include "structures.c"
+#include "structures.h"
 
 int main()
 {
