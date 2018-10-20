@@ -3,37 +3,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+
 enum e_sexe {H,F};
 enum e_privilege {adm, resp, form, stag};
-
-typedef struct s_groupe{
-    static int num;
-    Stagiaire* stagiaires;
-    Matiere* matieres;
-} Groupe;
-
-typedef struct s_seance{
-    Groupe groupe;
-    Matiere matiere;
-    Formateur formateur;
-    Date date;
-    enum typeseance type;
-} Seance;
-
-typedef struct s_matiere{
-    char* nom;
-    Formateur responsable;
-    Formateur* formateurs;
-    int volume_h;
-} Matiere;
+enum e_jour {lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche};
+enum e_tseance {TD, TP, Amphi, DS};
+int num_groupe;
+int num_matricule;
 
 typedef struct s_matricule{
     char* annee;
-    static int ordre;
+    int ordre;
 } Matricule;
 
+typedef struct s_login{
+    char* identifiant;
+    char* mdp;
+    enum e_privilege privilege;
+} Login;
+
 typedef struct s_stagiaire {
-    Matricule matricule;
+    char* matricule;
     Login login;
     char* nom;
     char* prenom;
@@ -55,13 +46,35 @@ typedef struct s_formateur {
     char* date_naissance; // a modifier en date si possible
     enum e_sexe sexe;
     char* tel_mobile;
-} Formateur
+} Formateur;
 
-typedef struct s_login{
-    char* identifiant;
-    char* mdp;
-    enum e_privilege privilege;
-} Login;
+typedef struct s_matiere{
+    char* nom;
+    Formateur responsable;
+    Formateur* formateurs;
+    int volume_h;
+} Matiere;
+
+typedef struct s_groupe{
+    int num;
+    Stagiaire* stg;
+    Matiere* matieres;
+    int nb_stg;
+} Groupe;
+
+typedef struct s_date{
+    enum e_jour jour;
+    int semaine;
+    int heure;
+} Date;
+
+typedef struct s_seance{
+    Groupe groupe;
+    Matiere matiere;
+    Formateur formateur;
+    Date date;
+    enum e_tseance type;
+} Seance;
 
 
 
@@ -69,5 +82,17 @@ typedef struct s_login{
 
 
 
+
+
+int initGrp(Groupe*);
+int destrGrp(Groupe *);
+int initStg(Stagiaire*);
+int destrStg(Stagiaire *);
+int initForm(Formateur*);
+int destrForm(Formateur*);
+
+Stagiaire accesStg(Login, Groupe*, int);
+Formateur accesForm(Login, Formateur*, int);
+int compareLog(Login, Login);
 
 #endif // STRUCTURES_H_INCLUDED

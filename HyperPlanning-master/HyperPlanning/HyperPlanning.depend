@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1540037810 source:c:\users\tomla\documents\ingénieur\s5\progc\projet_final\hyperplanning\hyperplanning-master\hyperplanning\main.c
+	"structures.h"
+
+1540038838 c:\users\tomla\documents\ingénieur\s5\progc\projet_final\hyperplanning\hyperplanning-master\hyperplanning\structures.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<string.h>
+
+1540041338 source:c:\users\tomla\documents\ingénieur\s5\progc\projet_final\hyperplanning\hyperplanning-master\hyperplanning\structures.c
+	"structures.h"
+

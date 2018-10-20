@@ -1,8 +1,25 @@
 #include "structures.h"
 
+
+
 int main()
 {
-    Login* log;
+    num_groupe=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de groupe max
+    num_matricule=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de matricule max
+    int nb_g,nb_f;
+    Groupe g1,g2;
+    Stagiaire s1;
+    if (initGrp(&g1)==-1)
+        return -1;
+    if (initGrp(&g2)==-1)
+        return -1;
+    if (initStg(&s1)==-1)
+        return -1;
+
+printf("g1 %d\n",g1.num);
+printf("g2 %d\n",g2.num);
+
+ /*   Login* log;
     int droit;
     printf("Hello world!\n");
     printf("\n------- Connexion -------\n");
@@ -17,11 +34,11 @@ int main()
         break;
     default: break;
     }
-
+*/
     return 0;
 }
 
-int connexion(Login* login){
+/*int connexion(Login* login){
     int fd = fopen("log.txt", "r");
     int r;
     char* string;
@@ -37,9 +54,9 @@ int connexion(Login* login){
 
     }
 
-}
+}*/
 
-void initLog(){
+/*void initLog(){
         char* base = "[admin;1]"
         fd = fopen("log.txt", "w");
         if(fd == NULL){
@@ -48,4 +65,5 @@ void initLog(){
         }
         r = fprintf((FILE*)fd, "%s", base);
         fclose(fd);
-}
+}*/
+
