@@ -95,11 +95,11 @@ int majVille(Stagiaire*);
 int majTelDom(Stagiaire*);
 int majTelMob(Stagiaire*);
 int addToGrp(Stagiaire*, Groupe*, int);
-int initForm(Formateur*, int*);
+int initForm(Formateur*);
 Stagiaire accesStg(Login, Groupe*, int);
 Formateur accesForm(Login, Formateur*, int);
 int compareLog(Login, Login);
 int initMat(Matiere*, Formateur*, int);
 int initSean(Groupe*, int, int);
-
+int addMat(Groupe*, Matiere*, int, int);
 #endif // STRUCTURES_H_INCLUDED

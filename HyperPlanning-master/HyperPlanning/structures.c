@@ -2,7 +2,7 @@
 
 int initGrp(Groupe* g, int* nb_g){
     g->num=++*nb_g;
-    g->matieres=malloc(sizeof(Matiere)*10);
+    g->matieres=malloc(sizeof(Matiere)*20);
     if (g->matieres==NULL)
         return -1;
     g->stg=malloc(sizeof(Stagiaire)*30);
@@ -13,6 +13,7 @@ int initGrp(Groupe* g, int* nb_g){
     if (g->seances==NULL)
         return -1;
     g->nb_sean=0;
+    g->nb_mat=0;
 
     printf("Un nouveau groupe a ete cree, vous pourrez y ajouter des stagiaires et des matieres via les interfaces proposees.\n");
     return 0;
@@ -116,7 +117,7 @@ int initStg(Stagiaire* s, Groupe* g, int nb_g){
     return 0;
 }
 
-int initForm(Formateur* f, int* nb_f){
+int initForm(Formateur* f){
     char tmp;
     f->nom=malloc(sizeof(char)*25);
     if (f->nom==NULL)
@@ -186,8 +187,6 @@ int initForm(Formateur* f, int* nb_f){
         f->login.privilege=resp;
     else
         f->login.privilege=form;
-
-    *nb_f++;
     return 0;
 }
 
@@ -341,9 +340,10 @@ int initMat(Matiere* m, Formateur* f, int nb_f){
         printf("Il n'existe aucun Formateur, vous devez en creer avant de creer une matière.\n");
         return 0;
     }
-    int i;
+    int i,j,valid;
     char* tmp=malloc(sizeof(char)*25);
     char tmp2;
+    int itmp;
     if(tmp==NULL)
         return -1;
 
@@ -359,36 +359,61 @@ int initMat(Matiere* m, Formateur* f, int nb_f){
         return -1;
     printf("Choisissez le volume d'heure pour les TD :\n");
     fflush(stdin);
-    scanf("%d",&m->volume_h[TD]);
+    scanf("%d",&itmp);
+    while (itmp<0 || itmp%2!=0){
+        printf("Choisissez un volume pair pour les TD :\n");
+        fflush(stdin);
+        scanf("%d",&itmp);
+    }
+    m->volume_h[TD]=itmp;
     printf("Choisissez le volume d'heure pour les TP :\n");
     fflush(stdin);
-    scanf("%d",&m->volume_h[TP]);
-    printf("Choisissez le volume d'heure pour les Amphitheatre :\n");
+    scanf("%d",&itmp);
+    while (itmp<0 || itmp%2!=0){
+        printf("Choisissez un volume pair pour les TP :\n");
+        fflush(stdin);
+        scanf("%d",&itmp);
+    }
+    m->volume_h[TP]=itmp;
+    printf("Choisissez le volume d'heure les Amphitheatre :\n");
     fflush(stdin);
-    scanf("%d",&m->volume_h[Amphi]);
+    scanf("%d",&itmp);
+    while (itmp<0 || itmp%2!=0){
+        printf("Choisissez un volume pair pour les Amphitheatre :\n");
+        fflush(stdin);
+        scanf("%d",&itmp);
+    }
+    m->volume_h[Amphi]=itmp;
     printf("Choisissez le volume d'heure pour les DE :\n");
     fflush(stdin);
     scanf("%d",&m->volume_h[DE]);
 
-    printf("Choisissez un Formateur Responsable (Tapez son nom) : ");
+
+    printf("Choisissez un Formateur Responsable (Tapez son nom) : \n");
     fflush(stdin);
     scanf("%s",tmp);
 
     i=0;
-    while(i<nb_f && tmp!=f[i].nom){
+    while(i<nb_f && strcmp(tmp,f[i].nom)!=0){
+            printf("%d  ---",i);
+            printf("%s",f[i].nom);
         i++;
     }
     while(i>=nb_f){
-        printf("Ce Formateur n'existe pas.\nTapez un nom de formateur correct.");
+        printf("Ce Formateur n'existe pas.\nTapez un nom de formateur correct.\n");
         fflush(stdin);
         scanf("%s",tmp);
         i=0;
-        while(i<nb_f && tmp!=f[i].nom){
+        while(i<nb_f && strcmp(tmp,f[i].nom)!=0){
+                        printf("%d  ---",i);
+            printf("%s",f[i].nom);
         i++;
         }
     }
     m->responsable=f[i];
-
+    if(f[i].login.privilege>resp){
+        f[i].login.privilege=resp;
+    }
 
     m->formateurs=malloc(sizeof(Formateur)*10);
     if (m->formateurs==NULL)
@@ -409,20 +434,30 @@ int initMat(Matiere* m, Formateur* f, int nb_f){
         fflush(stdin);
         scanf("%s",tmp);
         i=0;
-        while(i<nb_f && tmp!=f[i].nom){
+        while(i<nb_f && strcmp(tmp,f[i].nom)!=0){
             i++;
         }
         while(i>=nb_f){
-            printf("Ce Formateur n'existe pas.\nTapez un nom de formateur correct.");
+            printf("Ce Formateur n'existe pas.\nTapez un nom de formateur correct.\n");
             fflush(stdin);
             scanf("%s",tmp);
             i=0;
-            while(i<nb_f && tmp!=f[i].nom){
+            while(i<nb_f && strcmp(tmp,f[i].nom)!=0){
             i++;
             }
         }
-        m->formateurs[m->nb_form]=f[i];
-        m->nb_form++;
+        valid=1;
+        for(j=0;j<m->nb_form;j++){
+            if(strcmp(m->formateurs[j].nom,f[i].nom)==0){
+                valid=0;
+            }
+        }
+        if(valid!=0){
+            m->formateurs[m->nb_form]=f[i];
+            m->nb_form++;
+        }
+        else
+            printf("Ce formateur est deja present dans la liste des formateurs de la matiere\n");
 
         printf("Voulez-vous en ajouter un autre ? o/n :");
         fflush(stdin);
@@ -433,7 +468,6 @@ int initMat(Matiere* m, Formateur* f, int nb_f){
             scanf("%s",&tmp2);
         }
     }
-
     free(tmp);
     return 0;
 }
@@ -447,7 +481,7 @@ int initSean(Groupe* g, int nb_g, int nb_m){
         printf("Il n'existe pas de matiere, veuillez en creer avant de planifier une Seance.\n");
         return 0;
     }
-    int i,j,k;
+    int i,j,k,l;
     int itmp;
     int valid;
     char* stmp=malloc(sizeof(char)*25);
@@ -458,7 +492,7 @@ int initSean(Groupe* g, int nb_g, int nb_m){
     fflush(stdin);
     scanf("%d",&itmp);
     i=0;
-    while(itmp!=g[i].num && i<nb_g){
+    while(i<nb_g && itmp!=g[i].num){
         i++;
     }
     while(i>=nb_g){
@@ -466,7 +500,7 @@ int initSean(Groupe* g, int nb_g, int nb_m){
         printf("Le groupe choisit n'existe pas, selectionnez un autre numeros :\n");
         fflush(stdin);
         scanf("%d",&itmp);
-            while(itmp!=g[i].num && i<nb_g){
+            while(i<nb_g && itmp!=g[i].num){
                 i++;
             }
     }
@@ -482,7 +516,7 @@ int initSean(Groupe* g, int nb_g, int nb_m){
     fflush(stdin);
     scanf("%s",stmp);
     j=0;
-    while(stmp!=g[i].matieres[j].nom && j<g[i].nb_mat){
+    while(j<g[i].nb_mat && strcmp(stmp,g[i].matieres[j].nom)!=0){
         j++;
     }
     while(j>=g[i].nb_mat){
@@ -490,46 +524,13 @@ int initSean(Groupe* g, int nb_g, int nb_m){
         printf("Le groupe n'est pas concerne par cette matiere, selectionnez en une autre :\n");
         fflush(stdin);
         scanf("%s",stmp);
-            while(stmp!=g[i].matieres[j].nom && j<g[i].nb_mat){
+            while(j<g[i].nb_mat && strcmp(stmp,g[i].matieres[j].nom)!=0){
                 j++;
             }
     }
     g[i].seances[g[i].nb_sean].n_matiere=g[i].matieres[j].nom;
 
 
-    g[i].seances[g[i].nb_sean].formateur=malloc(sizeof(char)*25);
-    if (g[i].seances[g[i].nb_sean].formateur==NULL)
-        return -1;
-    printf("Choisissez un formateur pour la seance :\n");
-    fflush(stdin);
-    scanf("%s",stmp);
-    k=0;
-    if(stmp==g[i].matieres[j].responsable.nom){
-        g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].responsable.nom;
-    }
-    else{
-        while(stmp!=g[i].matieres[j].formateurs[k].nom && k<g[i].matieres[j].nb_form){
-            k++;
-        }
-        while(k>=g[i].matieres[j].nb_form){
-            printf("Le groupe n'est pas concerne par cette matiere, selectionnez en une autre :\n");
-            fflush(stdin);
-            scanf("%s",stmp);
-            if(stmp==g[i].matieres[j].responsable.nom){
-                k=-1;
-            }
-            else{
-                k=0;
-                while(stmp!=g[i].matieres[j].formateurs[k].nom && k<g[i].matieres[j].nb_form){
-                    k++;
-                }
-            }
-        }
-        if (k<0)
-            g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].responsable.nom;
-        else
-            g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].formateurs[k].nom;
-    }
 
     printf("Choisissez le type de la seance.\n1 : TD\n2 : TP\n3 : Amphitheatre\n4 : DE\n");
     fflush(stdin);
@@ -548,13 +549,51 @@ int initSean(Groupe* g, int nb_g, int nb_m){
     else
         g[i].seances[g[i].nb_sean].type=DE;
 
+    if (g[i].matieres[j].volume_h[g[i].seances[g[i].nb_sean].type]==0){
+        printf("Il n'est plus possible d'ajouter ce type de seance a ce groupe pour cette matiere.\n");
+        return 0;
+    }
+
+    g[i].seances[g[i].nb_sean].formateur=malloc(sizeof(char)*25);
+    if (g[i].seances[g[i].nb_sean].formateur==NULL)
+        return -1;
+    printf("Choisissez un formateur pour la seance :\n");
+    fflush(stdin);
+    scanf("%s",stmp);
+    k=0;
+    if(strcmp(stmp,g[i].matieres[j].responsable.nom)==0){
+        g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].responsable.nom;
+    }
+    else{
+        while(k<g[i].matieres[j].nb_form && strcmp(stmp,g[i].matieres[j].formateurs[k].nom)!=0){
+            k++;
+        }
+        while(k>=g[i].matieres[j].nb_form){
+            printf("Le formateur n'est pas concerne par cette matiere, selectionnez en un autre :\n");
+            fflush(stdin);
+            scanf("%s",stmp);
+            if(strcmp(stmp,g[i].matieres[j].responsable.nom)==0){
+                k=-1;
+            }
+            else{
+                k=0;
+                while(k<g[i].matieres[j].nb_form && strcmp(stmp,g[i].matieres[j].formateurs[k].nom)!=0){
+                    k++;
+                }
+            }
+        }
+        if (k<0)
+            g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].responsable.nom;
+        else
+            g[i].seances[g[i].nb_sean].formateur=g[i].matieres[j].formateurs[k].nom;
+    }
 
     do{
         valid=1;
         printf("Choisissez une date : \nChoisissez le mois :\n");
         fflush(stdin);
         scanf("%d",&itmp);
-        while(itmp>12 && itmp<1){
+        while(itmp>12 || itmp<1){
             printf("Choisissez un numeros entre 1 et 12\n");
             fflush(stdin);
             scanf("%d",&itmp);
@@ -564,7 +603,7 @@ int initSean(Groupe* g, int nb_g, int nb_m){
         printf("Choisissez un jour :\n");
         fflush(stdin);
         scanf("%d",&itmp);
-        while(itmp>31 && itmp<1){
+        while(itmp>31 || itmp<1){
             printf("Choisissez un numeros entre 1 et 31\n");
             fflush(stdin);
             scanf("%d",&itmp);
@@ -574,26 +613,26 @@ int initSean(Groupe* g, int nb_g, int nb_m){
         printf("Choisissez une heure de debut de la seance :\n");
         fflush(stdin);
         scanf("%d",&itmp);
-        while(itmp>18 && itmp<8){
+        while(itmp>18 || itmp<8){
             printf("Choisissez un numeros entre 8 et 18\n");
             fflush(stdin);
             scanf("%d",&itmp);
         }
         g[i].seances[g[i].nb_sean].date.heure=itmp;
 
-        for(j=0;j<nb_g;j++){
+        for(l=0;l<nb_g;l++){
             for(k=0;k<g[j].nb_sean;k++){
-                if (g[i].seances[g[i].nb_sean].formateur==g[j].seances[k].formateur && g[i].seances[g[i].nb_sean].date.mois==g[j].seances[k].date.mois && g[i].seances[g[i].nb_sean].date.jour==g[j].seances[k].date.jour){
+                if (strcmp(g[i].seances[g[i].nb_sean].formateur,g[l].seances[k].formateur)==0 && g[i].seances[g[i].nb_sean].date.mois==g[l].seances[k].date.mois && g[i].seances[g[i].nb_sean].date.jour==g[l].seances[k].date.jour){
                     if (g[i].seances[g[i].nb_sean].type==DE){
-                        if (g[i].seances[g[i].nb_sean].date.heure>g[j].seances[k].date.heure-1){
+                        if (g[i].seances[g[i].nb_sean].date.heure>g[l].seances[k].date.heure-1){
                             if (g[j].seances[k].type==DE){
-                                if (g[i].seances[g[i].nb_sean].date.heure<g[j].seances[k].date.heure+1){
+                                if (g[i].seances[g[i].nb_sean].date.heure<g[l].seances[k].date.heure+1){
                                     printf("Probleme d horaire pour ce formateur\n");
                                     valid=0;
                                 }
                             }
                             else{
-                                if (g[i].seances[g[i].nb_sean].date.heure<g[j].seances[k].date.heure+2){
+                                if (g[i].seances[g[i].nb_sean].date.heure<g[l].seances[k].date.heure+2){
                                     printf("Probleme d horaire pour ce formateur\n");
                                     valid=0;
                                 }
@@ -601,15 +640,15 @@ int initSean(Groupe* g, int nb_g, int nb_m){
                         }
                     }
                     else{
-                        if (g[i].seances[g[i].nb_sean].date.heure>g[j].seances[k].date.heure-2){
+                        if (g[i].seances[g[i].nb_sean].date.heure>g[l].seances[k].date.heure-2){
                             if (g[j].seances[k].type==DE){
-                                if (g[i].seances[g[i].nb_sean].date.heure<g[j].seances[k].date.heure+1){
+                                if (g[i].seances[g[i].nb_sean].date.heure<g[l].seances[k].date.heure+1){
                                     printf("Probleme d horaire pour ce formateur\n");
                                     valid=0;
                                 }
                             }
                             else{
-                                if (g[i].seances[g[i].nb_sean].date.heure<g[j].seances[k].date.heure+2){
+                                if (g[i].seances[g[i].nb_sean].date.heure<g[l].seances[k].date.heure+2){
                                     printf("Probleme d horaire pour ce formateur\n");
                                     valid=0;
                                 }
@@ -619,18 +658,18 @@ int initSean(Groupe* g, int nb_g, int nb_m){
                 }
             }
         }
-        for(j=0;j<g[i].nb_sean;j++){
-            if(g[i].seances[g[i].nb_sean].date.mois==g[i].seances[j].date.mois && g[i].seances[g[i].nb_sean].date.jour==g[i].seances[j].date.jour){
+        for(l=0;l<g[i].nb_sean;l++){
+            if(g[i].seances[g[i].nb_sean].date.mois==g[i].seances[l].date.mois && g[i].seances[g[i].nb_sean].date.jour==g[i].seances[l].date.jour){
                 if (g[i].seances[g[i].nb_sean].type==DE){
-                    if (g[i].seances[g[i].nb_sean].date.heure>g[i].seances[j].date.heure-1){
-                        if (g[j].seances[k].type==DE){
-                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[j].date.heure+1){
+                    if (g[i].seances[g[i].nb_sean].date.heure>g[i].seances[l].date.heure-1){
+                        if (g[j].seances[l].type==DE){
+                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[l].date.heure+1){
                                 printf("Probleme d horaire pour ce groupe\n");
                                 valid=0;
                             }
                         }
                         else{
-                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[j].date.heure+2){
+                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[l].date.heure+2){
                                 printf("Probleme d horaire pour ce formateur\n");
                                 valid=0;
                             }
@@ -638,15 +677,15 @@ int initSean(Groupe* g, int nb_g, int nb_m){
                     }
                 }
                 else{
-                    if (g[i].seances[g[i].nb_sean].date.heure>g[j].seances[k].date.heure-2){
-                        if (g[j].seances[k].type==DE){
-                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[j].date.heure+1){
+                    if (g[i].seances[g[i].nb_sean].date.heure>g[j].seances[l].date.heure-2){
+                        if (g[j].seances[l].type==DE){
+                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[l].date.heure+1){
                                 printf("Probleme d horaire pour ce formateur\n");
                                 valid=0;
                             }
                         }
                         else{
-                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[j].date.heure+2){
+                            if (g[i].seances[g[i].nb_sean].date.heure<g[i].seances[l].date.heure+2){
                                 printf("Probleme d horaire pour ce formateur\n");
                                 valid=0;
                             }
@@ -658,9 +697,71 @@ int initSean(Groupe* g, int nb_g, int nb_m){
 
     }while(valid!=1);
 
+    if(g[i].seances[g[i].nb_sean].type==DE)
+        g[i].matieres[j].volume_h[g[i].seances[g[i].nb_sean].type]--;
+    else
+        g[i].matieres[j].volume_h[g[i].seances[g[i].nb_sean].type]-=2;
+
+    g[i].nb_sean++;
     free(stmp);
     printf("La seance a ete cree");
 
     return 0;
 }
+
+int addMat(Groupe* g, Matiere* m,int nb_g, int nb_m){
+    if(nb_g<1){
+        printf("Il n'existe pas de groupe, veuillez en creer avant de planifier une Seance.\n");
+        return 0;
+    }
+    if(nb_m<1){
+        printf("Il n'existe pas de matiere, veuillez en creer avant de planifier une Seance.\n");
+        return 0;
+    }
+    int i,j;
+    int itmp;
+    char* stmp=malloc(sizeof(char)*25);
+    if (stmp==NULL)
+        return -1;
+
+    printf("Choisissez le numeros du Groupe auquel ajouter une Matiere :\n");
+    fflush(stdin);
+    scanf("%d",&itmp);
+    i=0;
+    while(itmp!=g[i].num && i<nb_g){
+        i++;
+    }
+    while(i>=nb_g){
+        i=0;
+        printf("Le groupe choisit n'existe pas, selectionnez un autre numeros :\n");
+        fflush(stdin);
+        scanf("%d",&itmp);
+            while(itmp!=g[i].num && i<nb_g){
+                i++;
+            }
+    }
+
+    printf("Choisissez la matiere a ajouter:\n");
+    fflush(stdin);
+    scanf("%s",stmp);
+    j=0;
+    while(j<nb_m && strcmp(stmp,m[j].nom)!=0){
+        j++;
+    }
+    while(j>=nb_m){
+        j=0;
+        printf("La matiere n existe pas, veuillez en selectionnez une autre :\n");
+        fflush(stdin);
+        scanf("%s",stmp);
+            while(j<nb_m && strcmp(stmp,m[j].nom)!=0){
+                j++;
+            }
+    }
+    g[i].matieres[g[i].nb_mat]=m[j];
+    g[i].nb_mat++;
+    free(stmp);
+    printf("La Matiere a ete ajoute au groupe.\n");
+    return 0;
+}
+
 

@@ -6,66 +6,30 @@ int main()
 {
     num_groupe=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de groupe max
     num_matricule=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de matricule max
-    int nb_g=0,nb_f=0; //a redefinir a la lecture du fichier pour que cela corresponde au nombre de matiere, groupe, formateur existant.
+    int nb_g=0,nb_f=0,nb_m=0; //a redefinir a la lecture du fichier pour que cela corresponde au nombre de matiere, groupe, formateur existant.
+    char rep;
+    int acces;
     Formateur* f=malloc(sizeof(Formateur)*30);
     if (f==NULL)
         return -1;
     Groupe* g=malloc(sizeof(Groupe)*3);
     if (g==NULL)
         return -1;
-    //Stagiaire s1;
-    if (initGrp(&g[0],&nb_g)==-1)
+    Matiere* m=malloc(sizeof(Matiere)*20);
+    if (g==NULL)
         return -1;
-    if (initGrp(&g[1],&nb_g)==-1)
-        return -1;
+    Login
 
-    printf("%d\n",g[0].num);
-    printf("%d\n",g[0].nb_stg);
+    do{
+        printf("Selectionnez votre acces :\ns : Stagiaire\nf : Formateur\n");
+        fflush(stdin);
+        scanf("%c",&rep);
+    }while(rep!='s' ||  rep!='f');
 
-    if (initForm(&f[0],&nb_f)!=0)
-        return -1;
+    if(rep==s)
+        acces=accesStg()
 
-    /*if (initStg(&s1,g,nb_g)==-1)
-        return -1;*/
-    printf("%s\n",f[0].nom);
-    printf("%s\n",f[0].prenom);
-    printf("%s\n",f[0].login.identifiant);
-    printf("%s\n",f[0].login.mdp);
-
-/*printf("%s\n",s1.prenom);
-printf("%s\n",s1.nom);
-printf("%s\n",s1.matricule);
-printf("%s\n",s1.login.identifiant);
-printf("%s\n",s1.login.mdp);
-if (s1.sexe==H)
-    printf("Homme\n");
-if (s1.sexe==F)
-    printf("Femme\n");
-printf("%s\n",s1.d_naissance);
-printf("%s\n",s1.d_inscription);
-printf("%d\n",s1.num_rue);
-printf("%s\n",s1.nom_rue);
-printf("%s\n",s1.code_postal);
-printf("%s\n",s1.ville);
-printf("%s\n",s1.tel_domicile);
-printf("%s\n",s1.tel_mobile);  */
-
- /*   Login* log;
-    int droit;
-    printf("Hello world!\n");
-    printf("\n------- Connexion -------\n");
-    printf("Login : ");
-    scanf("%s", log->identifiant);
-    printf("\n");
-
-    droit = connexion(log);
-
-    switch (droit){
-    case 1 : printf("admin");
-        break;
-    default: break;
-    }
-*/
+    printf("Bienvenue sur l'application")
     return 0;
 }
 
