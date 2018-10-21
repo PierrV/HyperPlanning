@@ -6,21 +6,31 @@ int main()
 {
     num_groupe=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de groupe max
     num_matricule=0; //a redéfinir à la lecture du fichier pour que ce soit égale au num de matricule max
-    int nb_g=0,nb_f=0;
-    Groupe* total_g=malloc(sizeof(Groupe)*3);
-    Groupe g1,g2;
-    Stagiaire s1;
-    if (initGrp(&g1,&nb_g)==-1)
+    int nb_g=0,nb_f=0; //a redefinir a la lecture du fichier pour que cela corresponde au nombre de matiere, groupe, formateur existant.
+    Formateur* f=malloc(sizeof(Formateur)*30);
+    if (f==NULL)
         return -1;
-    if (initGrp(&g2,&nb_g)==-1)
+    Groupe* g=malloc(sizeof(Groupe)*3);
+    if (g==NULL)
         return -1;
-
-    total_g[0]=g1;
-    total_g[1]=g2;
-
-    if (initStg(&s1,total_g,nb_g)==-1)
+    //Stagiaire s1;
+    if (initGrp(&g[0],&nb_g)==-1)
+        return -1;
+    if (initGrp(&g[1],&nb_g)==-1)
         return -1;
 
+    printf("%d\n",g[0].num);
+    printf("%d\n",g[0].nb_stg);
+
+    if (initForm(&f[0],&nb_f)!=0)
+        return -1;
+
+    /*if (initStg(&s1,g,nb_g)==-1)
+        return -1;*/
+    printf("%s\n",f[0].nom);
+    printf("%s\n",f[0].prenom);
+    printf("%s\n",f[0].login.identifiant);
+    printf("%s\n",f[0].login.mdp);
 
 /*printf("%s\n",s1.prenom);
 printf("%s\n",s1.nom);
