@@ -27,6 +27,28 @@ int main()
     l.mdp=malloc(sizeof(char)*20);
     if(l.mdp==NULL)
         return -1;
+
+    ///TEST
+    f[0].login.identifiant=malloc(sizeof(char)*9);
+    f[0].login.identifiant="adm";
+    f[0].login.mdp=malloc(sizeof(char)*5);
+    f[0].login.mdp="adm";
+    f[0].login.privilege=adm;
+    nb_f++;
+    g[0].num=1;
+    g[0].seances=malloc(sizeof(Seance)*3);
+    g[0].seances[0].formateur=malloc(sizeof(char)*9);
+    g[0].seances[0].formateur="Marcel";
+    g[0].seances[0].n_matiere=malloc(sizeof(char)*9);
+    g[0].seances[0].n_matiere="Maths";
+    g[0].seances[0].type=TD;
+    g[0].seances[0].date.annee=2018;
+    g[0].seances[0].date.mois=10;
+    g[0].seances[0].date.jour=24;
+    g[0].seances[0].date.heure=9;
+    g[0].nb_sean=1;
+    nb_g++;
+    ///TEST
     do{
         do{
             printf("Selectionnez votre acces :\ns : Stagiaire\nf : Formateur\n");
@@ -66,64 +88,101 @@ int main()
     else if (acces==form){
         do{
             do{
-                printf("Voulez vous voir votre planning mensuel ou votre planning hebdomadaire ?\nm : Mensuel\nh : Hebdomadaire\ne : Exit\n");
+                printf("Voulez vous voir votre planning mensuel ou votre planning hebdomadaire ?\nm : Mensuel\nh : Hebdomadaire\ns : Planning des Stagiaires\ne : Exit\n");
                 fflush(stdin);
                 scanf("%c",&rep);
-            }while(rep!='m' && rep !='h' && rep!='e');
+            }while(rep!='m' && rep !='h' && rep!='e' && rep!='s');
             if (rep=='h')
                 planningFH(fa);
             else if (rep=='m')
                 planningFM(fa);
+            else if (rep=='s'){
+                do{
+                    printf("Quel planning :\nm : Mensuel\nh : Hebdomadaire\ne : Exit\n");
+                    fflush(stdin);
+                    scanf("%c",&rep);
+                }while(rep!='m' && rep !='h' && rep!='e');
+                if (rep=='m')
+                    planningSM(g, nb_g);
+                else if (rep=='h')
+                    planningSH(g, nb_g);
+                rep='a';
+            }
         }while(rep!='e');
     }
     else if (acces==resp){
         do{
             do{
-                printf("Choisissez votre option :\nm : Voir le planning Mensuel\nh : Voir le planning Hebdomadaire\ng : Gestion du planning de sa matiere\ne : Exit\n");
+                printf("Choisissez votre option :\nm : Voir le planning Mensuel\nh : Voir le planning Hebdomadaire\ns : Planning des Stagiaires\ng : Gestion du planning de sa matiere\ne : Exit\n");
                 fflush(stdin);
                 scanf("%c",&rep);
-            }while(rep!='m' && rep !='h' && rep!='e' && rep!='g');
+            }while(rep!='m' && rep !='h' && rep!='e' && rep!='g' && rep!='s');
             if (rep=='h')
                 planningFH(fa);
             else if (rep=='m')
                 planningFM(fa);
             else if (rep=='g')
                 modifP(fa, g, m, nb_g, nb_m);
+            else if (rep=='s'){
+                do{
+                    printf("Quel planning :\nm : Mensuel\nh : Hebdomadaire\ne : Exit\n");
+                    fflush(stdin);
+                    scanf("%c",&rep);
+                }while(rep!='m' && rep !='h' && rep!='e');
+                if (rep=='m')
+                    planningSM(g, nb_g);
+                else if (rep=='h')
+                    planningSH(g, nb_g);
+                rep='a';
+            }
         }while(rep!='e');
     }
     else{
         do{
             do{
-                printf("Choisissez votre option :\nm : Voir le planning Mensuel\nh : Voir le planning Hebdomadaire\ng : Gestion Formateurs / Stagiaires / Matieres / Planning\ne : Exit\n");
+                printf("Choisissez votre option :\nm : Voir le planning Mensuel\nh : Voir le planning Hebdomadaire\ns : Planning des Stagiaires\ng : Gestion Formateurs / Stagiaires / Matieres / Planning\ne : Exit\n");
                 fflush(stdin);
                 scanf("%c",&rep);
-            }while(rep!='m' && rep !='h' && rep!='e' && rep!='g');
+            }while(rep!='m' && rep !='h' && rep!='e' && rep!='g' && rep!='s');
             if (rep=='h')
                 planningFH(fa);
             else if (rep=='m')
                 planningFM(fa);
+            else if (rep=='s'){
+                do{
+                    printf("Quel planning :\nm : Mensuel\nh : Hebdomadaire\ne : Exit\n");
+                    fflush(stdin);
+                    scanf("%c",&rep);
+                }while(rep!='m' && rep !='h' && rep!='e');
+                if (rep=='m')
+                    planningSM(g, nb_g);
+                else if (rep=='h')
+                    planningSH(g, nb_g);
+                rep='a';
+            }
             else if (rep=='g'){
                 do{
                     do{
                         printf("Choisissez l objet de la gestion :\nf : Formateurs\ng : Groupes\nm : Matieres\np : Planning\ns : Stagiaires\ne : Exit\n");
                         fflush(stdin);
-                        scanf("c",&rep);
+                        scanf("%c",&rep);
                     }while(rep!='f' && rep !='g' && rep!='m' && rep!='p' && rep!='s' && rep!='e');
                     if(rep=='f')
-                        modifF(fa, f, nb_f);
+                        modifF(f, nb_f);
                     else if (rep=='g')
-                        modifG(fa, g, nb_g);
+                        modifG(g, nb_g);
                     else if (rep=='m')
-                        modifM(fa, m, nb_m);
+                        modifM(m, nb_m);
                     else if (rep=='p')
                         modifP(fa, g, m, nb_g, nb_m);
                     else if (rep=='s')
-                        modifS(fa, g, nb_g);
+                        modifS(g, nb_g);
                 }while(rep!='e');
                 rep='a';
             }
         }while(rep!='e');
     }
+    deconnexion();
     return 0;
 }
 

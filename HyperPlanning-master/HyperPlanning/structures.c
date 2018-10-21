@@ -223,6 +223,8 @@ int accesForm(Formateur* fa, Login l,Formateur* f,int nb_f){
 }
 
 int compareLog(Login l, Login lo){
+    printf("id form : %s\nmdp form : %s\n",l.identifiant,l.mdp);
+    printf("id check : %s\nmdp check : %s\n",lo.identifiant,lo.mdp);
     if (strcmp(l.identifiant,lo.identifiant)==0){
         if(strcmp(l.mdp,lo.mdp)==0)
             return 1;
@@ -594,7 +596,17 @@ int initSean(Groupe* g, int nb_g, int nb_m){
 
     do{
         valid=1;
-        printf("Choisissez une date : \nChoisissez le mois :\n");
+        printf("Choisissez une date : \nChoisissez l'annee :\n");
+        fflush(stdin);
+        scanf("%d",&itmp);
+        while(itmp<2018 || itmp>2021){
+            printf("Choisissez une annee valide pour le groupe.\n");
+            fflush(stdin);
+            scanf("%d",&itmp);
+        }
+        g[i].seances[g[i].nb_sean].date.annee=itmp;
+
+        printf("Choisissez le mois :\n");
         fflush(stdin);
         scanf("%d",&itmp);
         while(itmp>12 || itmp<1){
@@ -768,4 +780,166 @@ int addMat(Groupe* g, Matiere* m,int nb_g, int nb_m){
     return 0;
 }
 
+void planningH(Groupe g){
+    /*time_t timestamp;
+    struct tm t;
+    int i,j,k;
+    char*** c;
+    timestamp = time(NULL);
+    &t = globaltime(&timestamp);
+    t->tm_mon++;
+    t->tm_year+=1900;
+    mktime(t);
 
+    printf("Lundi %d/%d/%d :\n",t->tm_mday,t->tm_mon,t->tm_year);
+    for(i=8;i<18;i++){
+        if(g.seances[k].date.annee==t->tm_year && g.seances[k].date.mois==t->tm_mon && g.seances[k].date.jour==t->tm_mday-t->tm_wday+i){
+
+        }
+    }
+    printf("Mardi %d/%d :\n",t->tm_mday,t->tm_mon);
+    for(i=8;i<18;i++){
+
+    }
+    printf("Mercredi %d/%d :\n",t->tm_mday,t->tm_mon);
+    for(i=8;i<18;i++){
+
+    }
+    printf("Jeudi %d/%d :\n",t->tm_mday,t->tm_mon);
+    for(i=8;i<18;i++){
+
+    }
+    printf("Vendredi %d/%d :\n",t->tm_mday,t->tm_mon);
+    for(i=8;i<18;i++){
+
+    }*/
+
+
+/*    c=(char***)malloc(sizeof(char)*7);
+    for(i=0;i<7;i++){
+        c[i]=(char**)malloc(sizeof(char)*22);
+        for(j=0;j<22;j++){
+            c[i][j]=(char*)malloc(sizeof(char)* 21);
+            c[i][j]="";
+        }
+    }
+
+    for(i=0;i<7;i++){
+        for(j=0;j<22;j+=2){
+            for(k=0;k<g.nb_sean;k++){
+                if(g.seances[k].date.annee==t->tm_year && g.seances[k].date.mois==t->tm_mon && g.seances[k].date.jour==t->tm_mday-t->tm_wday+i && g.seances[k].date.heure==j+8){
+                    if (g.seances[k].type==TD)
+                        c[i][j]=strncat("TD \0",g.seances[k].n_matiere,17);
+                    else if (g.seances[k].type==TP)
+                        c[i][j]=strncat("TP \0",g.seances[k].n_matiere,17);
+                    else if (g.seances[k].type==Amphi)
+                        c[i][j]=strncat("Amphi \0",g.seances[k].n_matiere,14);
+                    else
+                        c[i][j]=strncat("DE \0",g.seances[k].n_matiere,17);
+                    if (strcmp(c[i][j],"")!=0)
+                        strcpy(c[i][j+1],g.seances[k].formateur);
+                }
+            }
+        }
+    }
+
+    printf("    Lundi    Mardi    Mercredi Jeudi   Vendredi Samedi   Dimanche\n");
+    for(i=0;i<21;i+=2){
+        printf("%2d",(i/2)+8);
+        printf("   %20s%20s",c[0][i],c[1][i]);
+        printf("%20s%20s",c[2][i],c[3][i]);
+        printf("%20s%20s",c[4][i],c[5][i]);
+        printf("%20s\n",c[6][i]);
+        printf("     %20s%20s",c[0][i+1],c[1][i+1]);
+        printf("%20s%20s",c[2][i+1],c[3][i+1]);
+        printf("%20s%20s",c[4][i+1],c[5][i+1]);
+        printf("%20s\n",c[6][i+1]);
+    }
+*/
+    /*printf
+    printf("9   %20s%20s%20s%20%20s%20s%20s\n");
+    printf("10  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("11  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("12  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("13  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("14  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("15  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("16  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("17  %20s%20s%20s%20%20s%20s%20s\n");
+    printf("18  %20s%20s%20s%20%20s%20s%20s\n");*/
+
+ /*   for(i=0;i<7;i++){
+        for(j=0;j<22;j++)
+            free(c[i][j]);
+        free(c[i]);
+    }
+    free(c);*/
+}
+
+void planningM(Groupe g){
+}
+
+void planningFH(Formateur f){
+
+}
+
+void planningFM(Formateur f){
+}
+
+int planningSM(Groupe* g, int nb_g){
+
+    return 0;
+}
+
+int planningSH(Groupe* g, int nb_g){
+    if (nb_g<1){
+        printf("Il n y a pas de groupe existant");
+        return 0;
+    }
+    int tmp;
+    int i;
+    do{
+        printf("Choisissez le groupe du quel vous voulez voir l'emplois du temps\n");
+        fflush(stdin);
+        scanf("%d",&tmp);
+        i=0;
+        while(i<nb_g && g[i].num != tmp){
+            i++;
+        }
+        if(i>=nb_g)
+            printf("Ce numeros de groupe n est pas valide.\n");
+    }while(i>=nb_g);
+    planningH(g[i]);
+    return 0;
+}
+
+void modifP(Formateur f, Groupe* g, Matiere* m, int nb_g, int nb_m){
+}
+
+void modifF(Formateur* f, int nb_f){
+}
+
+void modifG(Groupe* g, int nb_g){
+}
+
+void modifM(Matiere* m, int nb_m){
+}
+
+void modifS(Groupe* g, int nb_g){
+}
+
+void deconnexion(){
+
+}
+
+int JourS(int jour,int mois,int an)
+{
+struct tm t;
+t.tm_year = an+100;
+t.tm_mon = mois - 1;
+t.tm_mday = jour;
+t.tm_hour = t.tm_min = t.tm_sec = 0;
+if (mktime(&t)==-1)
+    return 0;
+return t.tm_wday;
+}

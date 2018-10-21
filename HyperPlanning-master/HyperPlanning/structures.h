@@ -7,7 +7,7 @@
 
 enum e_sexe {H,F};
 enum e_privilege {adm, resp, form, stag, aucun};
-enum e_jour {lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche};
+enum e_jour {dimanche, lundi, mardi, mercredi, jeudi, vendredi, samedi};
 enum e_tseance {TD, TP, Amphi, DE};
 int num_groupe;
 int num_matricule;
@@ -60,6 +60,7 @@ typedef struct s_date{
     int jour;
     int mois;
     int heure;
+    int annee;
 } Date;
 
 typedef struct s_seance{
@@ -106,5 +107,14 @@ void planningH(Groupe);
 void planningM(Groupe);
 void planningFH(Formateur);
 void planningFM(Formateur);
+int planningSM(Groupe*, int);
+int planningSH(Groupe*, int);
 void modifP(Formateur, Groupe*, Matiere*, int, int);
+void modifF(Formateur*, int);
+void modifG(Groupe*, int);
+void modifM(Matiere*, int);
+void modifS(Groupe*, int);
+int JourS(int, int, int);
+
+void deconnexion();
 #endif // STRUCTURES_H_INCLUDED
