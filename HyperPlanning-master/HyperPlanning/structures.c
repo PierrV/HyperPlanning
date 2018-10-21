@@ -190,7 +190,7 @@ int initForm(Formateur* f){
     return 0;
 }
 
-Stagiaire accesStg(Login l,Groupe* g, int nb_g){
+int accesStg(Groupe* ga, Login l,Groupe* g, int nb_g){
     int i=0,j,co=0;
     while (co==0 && i<nb_g){
         j=0;
@@ -200,22 +200,26 @@ Stagiaire accesStg(Login l,Groupe* g, int nb_g){
         }
         i++;
     }
-    if(co!=0)
-        return g[i].stg[j];
-    //else
-      //  return NULL;
+    if(co!=0){
+        *ga=g[i];
+        return g[i].stg[j].login.privilege;
+    }
+    else
+       return aucun;
 }
 
-Formateur accesForm(Login l,Formateur* f,int nb_f){
+int accesForm(Formateur* fa, Login l,Formateur* f,int nb_f){
     int i=0,co=0;
     while (co==0 && i<nb_f){
         co=compareLog(l,f[i].login);
         i++;
     }
-    if(co!=0)
-        return f[i];
-        //else ??
-        //
+    if(co!=0){
+        *fa=f[i];
+        return f[i].login.privilege;
+    }
+    else
+        return aucun;
 }
 
 int compareLog(Login l, Login lo){

@@ -6,7 +6,7 @@
 #include <string.h>
 
 enum e_sexe {H,F};
-enum e_privilege {adm, resp, form, stag};
+enum e_privilege {adm, resp, form, stag, aucun};
 enum e_jour {lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche};
 enum e_tseance {TD, TP, Amphi, DE};
 int num_groupe;
@@ -96,10 +96,15 @@ int majTelDom(Stagiaire*);
 int majTelMob(Stagiaire*);
 int addToGrp(Stagiaire*, Groupe*, int);
 int initForm(Formateur*);
-Stagiaire accesStg(Login, Groupe*, int);
-Formateur accesForm(Login, Formateur*, int);
+int accesStg(Groupe* , Login, Groupe*, int);
+int accesForm(Formateur*, Login, Formateur*, int);
 int compareLog(Login, Login);
 int initMat(Matiere*, Formateur*, int);
 int initSean(Groupe*, int, int);
 int addMat(Groupe*, Matiere*, int, int);
+void planningH(Groupe);
+void planningM(Groupe);
+void planningFH(Formateur);
+void planningFM(Formateur);
+void modifP(Formateur, Groupe*, Matiere*, int, int);
 #endif // STRUCTURES_H_INCLUDED
