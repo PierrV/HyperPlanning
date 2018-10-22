@@ -781,7 +781,7 @@ int addMat(Groupe* g, Matiere* m,int nb_g, int nb_m){
 }
 
 void planningH(Groupe g){
-    /*time_t timestamp;
+    time_t timestamp;
     struct tm t;
     int i,j,k;
     char*** c;
@@ -812,7 +812,7 @@ void planningH(Groupe g){
     printf("Vendredi %d/%d :\n",t->tm_mday,t->tm_mon);
     for(i=8;i<18;i++){
 
-    }*/
+    }
 
 
 /*    c=(char***)malloc(sizeof(char)*7);
